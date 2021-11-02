@@ -1,8 +1,11 @@
 ﻿using PhotoDateEditor.Image;
+using PhotoDateEditor.ViewModels;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PhotoDateEditor.Windows
 {
@@ -11,14 +14,11 @@ namespace PhotoDateEditor.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<ImageMetadata> Images { get; set; }
-
         public MainWindow()
         {
             InitializeComponent();
 
-            Images = new();
-            PhotosListBox.ItemsSource = Images;
+            DataContext = new MainWindowViewModel();
         }
 
         private void PhotosListBox_Drop(object sender, DragEventArgs e)
@@ -28,9 +28,9 @@ namespace PhotoDateEditor.Windows
 
             var fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            var images = fileNames.Select(x => new ImageMetadata(x)).ToArray();
-            foreach (var i in images)
-                Images.Add(i);
+            var dataContext = (IImagesViewModel)DataContext;
+            if (dataContext.AddImagesCommand.CanExecute(fileNames))
+                dataContext.AddImagesCommand.Execute(fileNames);
         }
     }
 }

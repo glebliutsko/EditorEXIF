@@ -8,34 +8,45 @@ using System.Threading.Tasks;
 
 namespace PhotoDateEditor.Image
 {
-    class ImageMetadata
+    public class ImageMetadata
     {
-        public ImageFile Metadata { get; private set; }
-        public string PathToFile { get; private set; }
+        private ImageFile _fileMetadata;
+        public string PathToFile { get; }
 
-        public string FileName
-        {
-            get
-            {
-                return Path.GetFileName(PathToFile);
-            }
-        }
-
-        public DateTime CreateDateTime
-        {
-            get
-            {
-                return Metadata.Properties.Get<ExifDateTime>(ExifTag.DateTimeOriginal);
-            }
-        }
-
+        public DateTime? CreateDateTime { get; set; }
+        public DateTime? ModifyImageDateTime { get; set; }
+        public DateTime? ModifyFileDateTime { get; set; }
 
         public ImageMetadata(string pathToFile)
         {
-            Metadata = ImageFile.FromFile(pathToFile);
             PathToFile = pathToFile;
+            _fileMetadata = ImageFile.FromFile(PathToFile);
+
+            ReadMetadata();
         }
 
-        
+        private void ReadMetadata()
+        {
+            CreateDateTime = _fileMetadata.Properties.Get<ExifDateTime>(ExifTag.DateTimeOriginal)?.Value;
+            ModifyImageDateTime = _fileMetadata.Properties.Get<ExifDateTime>(ExifTag.DateTimeDigitized)?.Value;
+            ModifyFileDateTime = _fileMetadata.Properties.Get<ExifDateTime>(ExifTag.DateTime)?.Value;
+        }
+
+        private void SaveProperty(ExifTag tag, DateTime? value)
+        {
+            if (value == null)
+                _fileMetadata.Properties.Remove(tag);
+            else
+                _fileMetadata.Properties.Set(tag, (DateTime)value);
+        }
+
+        public void SaveFile()
+        {
+            SaveProperty(ExifTag.DateTimeOriginal, CreateDateTime);
+            SaveProperty(ExifTag.DateTimeDigitized, ModifyImageDateTime);
+            SaveProperty(ExifTag.DateTime, ModifyFileDateTime);
+
+            _fileMetadata.Save(PathToFile);
+        }
     }
 }
