@@ -1,11 +1,13 @@
-﻿using PhotoDateEditor.Utils;
-using System;
+﻿using System;
 using System.IO;
+using PhotoDateEditor.Utils;
 
 namespace PhotoDateEditor.Image
 {
     public class ImageMetadataModel : AbstractPropertyChangedClass
     {
+        private readonly ImageMetadata _metadata;
+
         private bool _isModified;
         public bool IsModified
         {
@@ -17,8 +19,6 @@ namespace PhotoDateEditor.Image
                 OnPropertyChanged(nameof(ViewFileName));
             }
         }
-
-        private ImageMetadata _metadata;
 
         public string PathToFile { get => _metadata.PathToFile; }
         public string FileName { get => Path.GetFileName(PathToFile); }

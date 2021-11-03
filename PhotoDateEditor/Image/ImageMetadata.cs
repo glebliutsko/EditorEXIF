@@ -1,16 +1,11 @@
-﻿using ExifLibrary;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ExifLibrary;
 
 namespace PhotoDateEditor.Image
 {
     public class ImageMetadata
     {
-        private ImageFile _fileMetadata;
+        private readonly ImageFile _fileMetadata;
         public string PathToFile { get; }
 
         public DateTime? CreateDateTime { get; set; }

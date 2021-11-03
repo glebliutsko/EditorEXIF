@@ -1,14 +1,13 @@
-﻿using PhotoDateEditor.Commands;
-using PhotoDateEditor.Image;
-using PhotoDateEditor.Utils;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using PhotoDateEditor.Commands;
+using PhotoDateEditor.Image;
+using PhotoDateEditor.Utils;
 
 namespace PhotoDateEditor.ViewModels
 {
-    class MainWindowViewModel : AbstractPropertyChangedClass, IImagesViewModel
+    public class MainWindowViewModel : AbstractPropertyChangedClass, IImagesViewModel
     {
         private ObservableCollection<ImageMetadataModel> _images = new();
         public ObservableCollection<ImageMetadataModel> Images
