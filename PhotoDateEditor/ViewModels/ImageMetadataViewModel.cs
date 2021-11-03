@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using PhotoDateEditor.Image;
 using PhotoDateEditor.Utils;
 
-namespace PhotoDateEditor.Image
+namespace PhotoDateEditor.ViewModels
 {
-    public class ImageMetadataModel : AbstractPropertyChangedClass
+    public class ImageMetadataViewModel : AbstractPropertyChangedClass
     {
         private readonly ImageMetadata _metadata;
 
@@ -15,7 +16,7 @@ namespace PhotoDateEditor.Image
             set
             {
                 _isModified = value;
-                OnPropertyChanged(nameof(IsModified));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(ViewFileName));
             }
         }
@@ -40,7 +41,7 @@ namespace PhotoDateEditor.Image
             {
                 _metadata.CreateDateTime = value;
                 IsModified = true;
-                OnPropertyChanged(nameof(CreateDateTime));
+                OnPropertyChanged();
             }
         }
         public DateTime? ModifyImageDateTime
@@ -50,7 +51,7 @@ namespace PhotoDateEditor.Image
             {
                 _metadata.ModifyImageDateTime = value;
                 IsModified = true;
-                OnPropertyChanged(nameof(ModifyImageDateTime));
+                OnPropertyChanged();
             }
         }
         public DateTime? ModifyFileDateTime
@@ -60,16 +61,16 @@ namespace PhotoDateEditor.Image
             {
                 _metadata.ModifyFileDateTime = value;
                 IsModified = true;
-                OnPropertyChanged(nameof(ModifyFileDateTime));
+                OnPropertyChanged();
             }
         }
 
-        public ImageMetadataModel(ImageMetadata metadata)
+        public ImageMetadataViewModel(ImageMetadata metadata)
         {
             _metadata = metadata;
         }
 
-        public ImageMetadataModel(string filename)
+        public ImageMetadataViewModel(string filename)
         {
             _metadata = new ImageMetadata(filename);
         }

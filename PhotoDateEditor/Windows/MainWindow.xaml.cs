@@ -13,8 +13,6 @@ namespace PhotoDateEditor.Windows
         public MainWindow()
         {
             InitializeComponent();
-
-            DataContext = new MainWindowViewModel();
         }
 
         private void PhotosListBox_Drop(object sender, DragEventArgs e)
@@ -24,7 +22,7 @@ namespace PhotoDateEditor.Windows
 
             var fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            var dataContext = (IImagesViewModel)DataContext;
+            var dataContext = (MainWindowViewModel)DataContext;
             if (dataContext.AddImagesCommand.CanExecute(fileNames))
                 dataContext.AddImagesCommand.Execute(fileNames);
         }
