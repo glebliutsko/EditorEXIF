@@ -23,8 +23,13 @@ namespace PhotoDateEditor.Windows
             var fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             var dataContext = (MainWindowViewModel)DataContext;
-            if (dataContext.AddImagesCommand.CanExecute(fileNames))
-                dataContext.AddImagesCommand.Execute(fileNames);
+            if (dataContext.OpenImagesCommand.CanExecute(fileNames))
+                dataContext.OpenImagesCommand.Execute(fileNames);
+        }
+
+        private void CloseWindowMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

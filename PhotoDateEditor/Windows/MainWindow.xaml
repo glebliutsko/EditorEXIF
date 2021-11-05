@@ -58,67 +58,88 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"
-                              MinWidth="250" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <ListBox x:Name="PhotosListBox"
-                 ItemsSource="{Binding Images}"
-                 SelectedItem="{Binding SelectImage}"
-                 SelectionMode="Single"
-                 Background="#FFF7F7F7"
-                 Grid.Column="0"
-                 AllowDrop="True"
-                 Drop="PhotosListBox_Drop">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image MaxHeight="100"
-                               MaxWidth="100"
-                               Source="{Binding PathToFile, Converter={StaticResource pathConverter}}"
-                               Stretch="UniformToFill" />
-                        <StackPanel Margin="5 0 0 0">
-                            <TextBlock Text="{Binding ViewFileName}"
-                                       FontSize="16"
-                                       FontWeight="Bold" />
-                            <TextBlock Text="{Binding CreateDateTime, StringFormat=Создание:\ dd.MM.yyyy\ HH:mm:ss}" />
-                            <TextBlock Text="{Binding ModifyImageDateTime, StringFormat=Изменение\ изображения:\ dd.MM.yyyy\ HH:mm:ss}" />
-                            <TextBlock Text="{Binding ModifyFileDateTime, StringFormat=Изменение\ файла:\ dd.MM.yyyy\ HH:mm:ss}" />
+        <Menu Grid.Row="0"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть"
+                          Command="{Binding OpenImagesDialogCommand}" />
+                <MenuItem Header="Выход"
+                          Click="CloseWindowMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Row="1"
+              Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"
+                                  MinWidth="250" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+
+            <ListBox Grid.Column="0"
+                     x:Name="PhotosListBox"
+                     ItemsSource="{Binding Images}"
+                     SelectedItem="{Binding SelectImage}"
+                     SelectionMode="Single"
+                     Background="#FFF7F7F7"
+                     AllowDrop="True"
+                     Drop="PhotosListBox_Drop">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image MaxHeight="100"
+                                   MaxWidth="100"
+                                   Source="{Binding PathToFile, Converter={StaticResource pathConverter}}"
+                                   Stretch="UniformToFill" />
+                            <StackPanel Margin="5 0 0 0">
+                                <TextBlock Text="{Binding ViewFileName}"
+                                           FontSize="16"
+                                           FontWeight="Bold" />
+                                <TextBlock Text="{Binding CreateDateTime, StringFormat=Создание:\ dd.MM.yyyy\ HH:mm:ss}" />
+                                <TextBlock Text="{Binding ModifyImageDateTime, StringFormat=Изменение\ изображения:\ dd.MM.yyyy\ HH:mm:ss}" />
+                                <TextBlock Text="{Binding ModifyFileDateTime, StringFormat=Изменение\ файла:\ dd.MM.yyyy\ HH:mm:ss}" />
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        <StackPanel Grid.Column="1"
-                    Margin="10 0">
-            <TextBlock Text="Дата создания: " />
-            <wpfTool:DateTimePicker Style="{StaticResource EditerDateTime}"
-                                    Value="{Binding DisplayedCreateDateTimeView}" />
+            <StackPanel Grid.Column="1"
+                        Margin="10 0">
+                <TextBlock Text="Дата создания: " />
+                <wpfTool:DateTimePicker Style="{StaticResource EditerDateTime}"
+                                        Value="{Binding DisplayedCreateDateTimeView}" />
 
-            <TextBlock Text="Дата изменения изображения: " />
-            <wpfTool:DateTimePicker Style="{StaticResource DisableIfSameDate}"
-                                    Value="{Binding DisplayedModifyImageDateTime}" />
+                <TextBlock Text="Дата изменения изображения: " />
+                <wpfTool:DateTimePicker Style="{StaticResource DisableIfSameDate}"
+                                        Value="{Binding DisplayedModifyImageDateTime}" />
 
-            <TextBlock Text="Дата изменения файла: " />
-            <wpfTool:DateTimePicker Style="{StaticResource DisableIfSameDate}"
-                                    Value="{Binding DisplayedModifyFileDateTime}" />
+                <TextBlock Text="Дата изменения файла: " />
+                <wpfTool:DateTimePicker Style="{StaticResource DisableIfSameDate}"
+                                        Value="{Binding DisplayedModifyFileDateTime}" />
 
-            <Button Padding="10 2"
-                    HorizontalAlignment="Center"
-                    Content="Сохранить изменения"
-                    Command="{Binding SaveCommand}" />
-        </StackPanel>
+                <Button Padding="10 2"
+                        HorizontalAlignment="Center"
+                        Content="Сохранить изменения"
+                        Command="{Binding SaveSelectImageCommand}" />
+            </StackPanel>
 
-        <CheckBox Grid.Column="1"
-                  Style="{StaticResource ToggleEnableControl}"
-                  IsChecked="{Binding IsSameDateForAll}"
-                  VerticalContentAlignment="Center"
-                  HorizontalAlignment="Right"
-                  VerticalAlignment="Bottom"
-                  Content="Одинаковая дата для всех полей" />
+            <CheckBox Grid.Column="1"
+                      Style="{StaticResource ToggleEnableControl}"
+                      IsChecked="{Binding IsSameDateForAll}"
+                      VerticalContentAlignment="Center"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Bottom"
+                      Content="Одинаковая дата для всех полей" />
+        </Grid>
     </Grid>
 </Window>

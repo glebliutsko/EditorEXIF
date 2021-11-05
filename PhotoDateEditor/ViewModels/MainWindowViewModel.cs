@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using PhotoDateEditor.Commands;
 using PhotoDateEditor.Utils;
@@ -52,7 +52,7 @@ namespace PhotoDateEditor.ViewModels
             {
                 _displayedCreateDateTime = value;
                 SelectImage.CreateDateTime = value;
-                
+
                 if (IsSameDateForAll)
                 {
                     DisplayedModifyImageDateTime = value;
@@ -101,35 +101,76 @@ namespace PhotoDateEditor.ViewModels
         #endregion
 
         #region Command
-        private ICommand _addImagesCommand;
-        public ICommand AddImagesCommand
+        private ICommand _openImagesDialogCommand;
+        public ICommand OpenImagesDialogCommand
         {
             get
             {
-                return _addImagesCommand ??
-                    (_addImagesCommand = new RealyCommand(obj =>
+                return _openImagesDialogCommand ??
+                    (_openImagesDialogCommand = new RealyCommand(obj =>
                     {
-                        string[] fileNames = (string[])obj;
-
-                        ImageMetadataViewModel[] images = fileNames.Select(x => new ImageMetadataViewModel(x)).ToArray();
-                        foreach (var i in images)
-                            Images.Add(i);
+                        var dialog = new DialogService();
+                        if (dialog.OpenFile())
+                        {
+                            AddFilesList(dialog.FilesPath);
+                        }
                     }));
             }
         }
 
-        private ICommand _saveCommand;
-        public ICommand SaveCommand
+        private ICommand _openImagesCommand;
+        public ICommand OpenImagesCommand
         {
             get
             {
-                return _saveCommand ??
-                    (_saveCommand = new RealyCommand(obj =>
+                return _openImagesCommand ??
+                    (_openImagesCommand = new RealyCommand(obj =>
                     {
-                        SelectImage.SaveFile();
+                        string[] fileNames = (string[])obj;
+                        AddFilesList(fileNames);
+                    }));
+            }
+        }
+
+        private ICommand _saveSelectImageCommand;
+        public ICommand SaveSelectImageCommand
+        {
+            get
+            {
+                return _saveSelectImageCommand ??
+                    (_saveSelectImageCommand = new RealyCommand(obj =>
+                    {
+                        try
+                        {
+                            SelectImage.SaveFile();
+                            MessageBox.Show("Файл сохранен", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Ошибка сохранения", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }, obj => SelectImage != null));
             }
         }
         #endregion
+
+        private void AddFilesList(string[] fileNames)
+        {
+            fileNames
+                .Select(x =>
+                {
+                    try
+                    {
+                        return new ImageMetadataViewModel(x);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Не удалось открыть файл {x}\n{ex.Message}", "Ошибка чтения", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return null;
+                    }
+                })
+                .ToList()
+                .ForEach(x => { if (x != null) Images.Add(x); });
+        }
     }
 }
