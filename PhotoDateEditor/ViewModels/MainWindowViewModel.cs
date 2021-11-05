@@ -152,6 +152,20 @@ namespace PhotoDateEditor.ViewModels
                     }, obj => SelectImage != null));
             }
         }
+
+        private ICommand _closeImageCommand;
+        public ICommand CloseImageCommand
+        {
+            get
+            {
+                return _closeImageCommand ??
+                    (_closeImageCommand = new RealyCommand(obj =>
+                    {
+                        var closeImage = (ImageMetadataViewModel)obj;
+                        Images.Remove(closeImage);
+                    }));
+            }
+        }
         #endregion
 
         private void AddFilesList(string[] fileNames)

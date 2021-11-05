@@ -7,8 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="res\close.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ExifLibNet" Version="2.1.4" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="res\close.png" />
   </ItemGroup>
 
 </Project>

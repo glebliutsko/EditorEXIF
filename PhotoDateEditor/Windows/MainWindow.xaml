@@ -16,6 +16,9 @@
         <viewmodels:MainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
+        <ImageBrush x:Key="CloseIcon"
+                    ImageSource="/res/close.png" />
+
         <utils:PathToImageConverter x:Key="pathConverter" />
 
         <Style TargetType="{x:Type Control}"
@@ -57,6 +60,32 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="{x:Type Button}"
+               x:Key="CloseImage">
+            <Setter Property="Height"
+                    Value="16" />
+            <Setter Property="Width"
+                    Value="16" />
+            <Setter Property="Background"
+                    Value="{StaticResource CloseIcon}" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -71,7 +100,7 @@
                 <MenuItem Header="Открыть"
                           Command="{Binding OpenImagesDialogCommand}" />
                 <MenuItem Header="Выход"
-                          Click="CloseWindowMenuItem_Click"/>
+                          Click="CloseWindowMenuItem_Click" />
             </MenuItem>
         </Menu>
 
@@ -80,7 +109,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"
                                   MinWidth="250" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"
+                                  MaxWidth="250" />
             </Grid.ColumnDefinitions>
 
 
@@ -92,15 +122,31 @@
                      SelectionMode="Single"
                      Background="#FFF7F7F7"
                      AllowDrop="True"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                      Drop="PhotosListBox_Drop">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Stretch"></Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image MaxHeight="100"
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Column="0"
+                                   MaxHeight="100"
                                    MaxWidth="100"
                                    Source="{Binding PathToFile, Converter={StaticResource pathConverter}}"
                                    Stretch="UniformToFill" />
-                            <StackPanel Margin="5 0 0 0">
+
+                            <StackPanel Grid.Column="1"
+                                        Margin="5 0 0 0">
                                 <TextBlock Text="{Binding ViewFileName}"
                                            FontSize="16"
                                            FontWeight="Bold" />
@@ -108,7 +154,13 @@
                                 <TextBlock Text="{Binding ModifyImageDateTime, StringFormat=Изменение\ изображения:\ dd.MM.yyyy\ HH:mm:ss}" />
                                 <TextBlock Text="{Binding ModifyFileDateTime, StringFormat=Изменение\ файла:\ dd.MM.yyyy\ HH:mm:ss}" />
                             </StackPanel>
-                        </StackPanel>
+
+                            <Button Grid.Column="2"
+                                    Style="{StaticResource CloseImage}"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CloseImageCommand}"
+                                    CommandParameter="{Binding}" />
+
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
