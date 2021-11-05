@@ -40,12 +40,8 @@ namespace PhotoDateEditor.ViewModels
                 OnPropertyChanged(nameof(DisplayedModifyFileDateTime));
 
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(IsSelectedImage));
-                OnPropertyChanged(nameof(IsCanEditAllDate));
             }
         }
-
-        public bool IsSelectedImage { get => SelectImage != null; }
 
         #region DateProperty
         private DateTime? _displayedCreateDateTime;
@@ -90,8 +86,6 @@ namespace PhotoDateEditor.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public bool IsCanEditAllDate { get => !IsSameDateForAll && IsSelectedImage; }
         #endregion
 
         private bool _isSameDateForAll;
@@ -102,7 +96,6 @@ namespace PhotoDateEditor.ViewModels
             {
                 _isSameDateForAll = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(IsCanEditAllDate));
             }
         }
         #endregion
@@ -134,7 +127,7 @@ namespace PhotoDateEditor.ViewModels
                     (_saveCommand = new RealyCommand(obj =>
                     {
                         SelectImage.SaveFile();
-                    }, obj => IsSelectedImage));
+                    }, obj => SelectImage != null));
             }
         }
         #endregion

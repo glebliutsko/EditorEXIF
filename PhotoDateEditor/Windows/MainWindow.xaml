@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-        xmlns:local="clr-namespace:PhotoDateEditor.Windows"
         xmlns:viewmodels="clr-namespace:PhotoDateEditor.ViewModels"
         xmlns:utils="clr-namespace:PhotoDateEditor.Utils"
         mc:Ignorable="d"
@@ -18,8 +17,21 @@
     </Window.DataContext>
     <Window.Resources>
         <utils:PathToImageConverter x:Key="pathConverter" />
+
+        <Style TargetType="{x:Type Control}"
+               x:Key="ToggleEnableControl">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectImage}"
+                             Value="{x:Null}">
+                    <Setter Property="IsEnabled"
+                            Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Style TargetType="{x:Type wpfTool:DateTimePicker}"
-               x:Key="EditerDateTime">
+               x:Key="EditerDateTime"
+               BasedOn="{StaticResource ToggleEnableControl}">
             <Setter Property="Padding"
                     Value="0 2" />
             <Setter Property="VerticalContentAlignment"
@@ -33,6 +45,18 @@
             <Setter Property="Margin"
                     Value="0 0 0 10" />
         </Style>
+
+        <Style TargetType="{x:Type wpfTool:DateTimePicker}"
+               x:Key="DisableIfSameDate"
+               BasedOn="{StaticResource EditerDateTime}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSameDateForAll}"
+                             Value="True">
+                    <Setter Property="IsEnabled"
+                            Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -40,6 +64,7 @@
                               MinWidth="250" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
         <ListBox x:Name="PhotosListBox"
                  ItemsSource="{Binding Images}"
                  SelectedItem="{Binding SelectImage}"
@@ -71,18 +96,15 @@
         <StackPanel Grid.Column="1"
                     Margin="10 0">
             <TextBlock Text="Дата создания: " />
-            <wpfTool:DateTimePicker IsEnabled="{Binding IsSelectedImage}"
-                                    Style="{StaticResource EditerDateTime}"
+            <wpfTool:DateTimePicker Style="{StaticResource EditerDateTime}"
                                     Value="{Binding DisplayedCreateDateTimeView}" />
 
             <TextBlock Text="Дата изменения изображения: " />
-            <wpfTool:DateTimePicker IsEnabled="{Binding IsCanEditAllDate}"
-                                    Style="{StaticResource EditerDateTime}"
+            <wpfTool:DateTimePicker Style="{StaticResource DisableIfSameDate}"
                                     Value="{Binding DisplayedModifyImageDateTime}" />
 
             <TextBlock Text="Дата изменения файла: " />
-            <wpfTool:DateTimePicker IsEnabled="{Binding IsCanEditAllDate}"
-                                    Style="{StaticResource EditerDateTime}"
+            <wpfTool:DateTimePicker Style="{StaticResource DisableIfSameDate}"
                                     Value="{Binding DisplayedModifyFileDateTime}" />
 
             <Button Padding="10 2"
@@ -92,7 +114,7 @@
         </StackPanel>
 
         <CheckBox Grid.Column="1"
-                  IsEnabled="{Binding IsCanEditDate}"
+                  Style="{StaticResource ToggleEnableControl}"
                   IsChecked="{Binding IsSameDateForAll}"
                   VerticalContentAlignment="Center"
                   HorizontalAlignment="Right"
