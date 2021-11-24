@@ -1,9 +1,10 @@
 ﻿<Application x:Class="PhotoDateEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:clr="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:PhotoDateEditor"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
-
+        <clr:String x:Key="ProgramName">Редактор даты</clr:String>
     </Application.Resources>
 </Application>

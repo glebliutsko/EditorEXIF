@@ -1,0 +1,48 @@
+﻿<Window x:Class="PhotoDateEditor.Windows.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoDateEditor.Windows"
+        mc:Ignorable="d"
+        Title="О программе"
+        Height="170"
+        Width="350"
+        ResizeMode="NoResize">
+    <DockPanel Margin="5">
+        <Border DockPanel.Dock="Top"
+                BorderBrush="Black"
+                BorderThickness="0 0 0 1"
+                Margin="0 0 0 5">
+            <TextBlock Text="{StaticResource ProgramName}"
+                       HorizontalAlignment="Center"
+                       FontSize="18" />
+        </Border>
+
+        <TextBlock DockPanel.Dock="Top"
+                   Text="Редактор даты создания/изменения изображения." />
+
+        <TextBlock DockPanel.Dock="Top">
+            Разработчик: <Hyperlink Tag="https://github.com/glebliutsko"
+                                    Click="OpenLink_Click">glebliutsko</Hyperlink>
+        </TextBlock>
+
+        <TextBlock DockPanel.Dock="Top">
+            Использованы иконки с сайта <Hyperlink Tag="https://icons8.ru/"
+                                                   Click="OpenLink_Click">icons8.ru</Hyperlink>
+        </TextBlock>
+
+        <StackPanel DockPanel.Dock="Bottom"
+                    VerticalAlignment="Bottom">
+            <TextBlock FontSize="9"
+                       TextAlignment="Center">
+                Это приложение распространяется без каких-либо гарантий.
+            </TextBlock>
+            <TextBlock FontSize="9"
+                       TextAlignment="Center">
+                Подробнее: <Hyperlink Tag="https://github.com/glebliutsko/photo-date-editor/blob/master/LICENSE"
+                                      Click="OpenLink_Click">Unlicense License</Hyperlink>
+            </TextBlock> 
+        </StackPanel>
+    </DockPanel>
+</Window>

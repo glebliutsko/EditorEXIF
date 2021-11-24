@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using PhotoDateEditor.Commands;
 using PhotoDateEditor.Utils;
+using PhotoDateEditor.Windows;
 
 namespace PhotoDateEditor.ViewModels
 {
@@ -163,6 +164,19 @@ namespace PhotoDateEditor.ViewModels
                     {
                         var closeImage = (ImageMetadataViewModel)obj;
                         Images.Remove(closeImage);
+                    }));
+            }
+        }
+
+        private ICommand _openAboutCommand;
+        public ICommand OpenAboutCommand
+        {
+            get
+            {
+                return _openAboutCommand ??
+                    (_openAboutCommand = new RealyCommand(obj =>
+                    {
+                        new AboutWindow().ShowDialog();
                     }));
             }
         }
